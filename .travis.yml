@@ -1,0 +1,19 @@
+language: rust
+rust:
+- stable
+- beta
+- nightly
+cache: cargo
+script:
+- cargo clippy --verbose --all
+- cargo test --verbose --all
+jobs:
+  allow_failures:
+  - rust: nightly
+  fast_finish: true
+deploy:
+  provider: cargo
+  token:
+    secure: HqoNk2pvypkQopr+NmBqaxt16xQC37zQ8GAlgfaiCFHYaXb5aWHbMrvV0G8bCsEL2rBSSx1HRD513l3B9NusDPNVuK8uUbPWZmQCGoxXAPzw9i641l7SlFdxVElbmeU7/kH/vNlZhR/gxnVHXk8MzJ1sldLomBNjHiJDHsD+HIN8F4bS7jxJSF88aDuHLns4TdqNNP1fo6DbbgW680OjpgPeMmmmMFPl5iTG55/xjhZ++RMP9mCuSsOxNiA3iVXVpEYMajFsS1ftgm0fCpcUwN8bAZKFfL6Db6PSraVF8TB5AbVuxKaOW+13jQbWfKjYrjzDLRJRkVCOgWCGVvL5rEsNn7Q5bccF2RIubrAfGDnwsI/oDu4T1kyOksunu3B0BOTG2wCM3JYdFGpduzlIHERyJacYRp9NeeK6EePIpdz2f1PxLx2l0uCVWiiQrQaSuXzSY0v3vV7n8BAI8/yDDLitik6Ch8sFicvWLcxtn8+yRO90fEYH2fnCub5+gTwL1rvCkrOy9vZVym1oJZq2WBvmBywGVuBGzdLaeGN0q0b4/BISb91BFfDAmiYAQw6+bLCTuomwJklKC/gN9YrFbwlexpByJRdZmrUJlW3GPfOmDDFdGORTqLX22qA9VER19nYjOG0drVJ+yKNQytcKmNRXrEziS9kokX6VeWGDTGs=
+  on:
+    tags: true
