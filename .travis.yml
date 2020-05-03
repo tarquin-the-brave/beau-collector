@@ -1,18 +1,12 @@
 language: rust
 rust:
 - stable
-- beta
-- nightly
 cache: cargo
 before_install:
 - rustup component add clippy
 script:
 - cargo clippy --verbose --all
 - cargo test --verbose --all
-jobs:
-  allow_failures:
-  - rust: nightly
-  fast_finish: true
 deploy:
   provider: cargo
   token:
