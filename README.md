@@ -13,3 +13,8 @@ where each error is on a newline within the string representation of that error.
 A use case for this could be in a CLI tool where you want to collect all the errors and
 print them to `stderr` for the user to see them all at once.
 
+## Contributing
+
+Please do.  See [issues][issues].  Pick one to fix, or raise a new one.
+
+[issues]: https://github.com/tarquin-the-brave/beau-collector/issues
