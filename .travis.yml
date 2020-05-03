@@ -4,8 +4,9 @@ rust:
 - beta
 - nightly
 cache: cargo
-script:
+before_install:
 - rustup component add clippy --toolchain stable-x86_64-unknown-linux-gnu
+script:
 - cargo clippy --verbose --all
 - cargo test --verbose --all
 jobs:
