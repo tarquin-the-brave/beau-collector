@@ -1,5 +1,13 @@
 # beau\_collector
 
+[![Build Status](https://api.travis-ci.org/tarquin-the-brave/beau-collector.svg?branch=master)][travis]
+[![Latest Version](https://img.shields.io/crates/v/beau_collector.svg)][crates.io]
+[![Rust Documentation](https://img.shields.io/badge/api-rustdoc-blue.svg)][docs.rs]
+
+[travis]: https://travis-ci.org/tarquin-the-brave/beau-collector
+[crates.io]: https://crates.io/crates/beau_collector
+[docs.rs]: https://docs.rs/beau_collector
+
 Collect _all_ the errors from an iterator of `Result`s into a single `Error`.
 
 The default behaviour of running `collect::<Result<_, _>>()` on an iterator of
