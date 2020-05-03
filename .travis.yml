@@ -3,7 +3,7 @@ rust:
 - stable
 - beta
 - nightly
-cache: cargo
+# cache: cargo
 script:
 - cargo clippy --verbose --all
 - cargo test --verbose --all
