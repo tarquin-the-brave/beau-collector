@@ -26,7 +26,7 @@
 //!
 //!  let x = vec!["one", "two", "three", "four"];
 //!
-//!  let y: Result<HashMap<String, usize>> = x
+//!  let y = x
 //!      .iter()
 //!      .map(|name: &&str| -> Result<(String, usize)> {
 //!          let length = name.len();
@@ -36,7 +36,9 @@
 //!             Err(anyhow!("name \"{}\" has {} characters", name, length))
 //!          }
 //!      })
-//!      .bcollect();
+//!      // Turbofish ::<> gives the type to be collected into the Ok()
+//!      // variant of the Result.
+//!      .bcollect::<HashMap<_, _>>();
 //!
 //!  assert_eq!(
 //!      y.unwrap_err().to_string(),
@@ -44,27 +46,35 @@
 //!  ```
 use anyhow::{anyhow, Error, Result};
 
-pub trait BeauCollector<I, T>
-where
-    I: std::iter::FromIterator<T>,
-{
-    fn bcollect(self) -> Result<I>;
+pub trait BeauCollector<T> {
+    fn bcollect<I>(self) -> Result<I>
+    where
+        I: std::iter::FromIterator<T>;
 }
 
-impl<I, T, U, E> BeauCollector<I, T> for U
+impl<T, U, E> BeauCollector<T> for U
 where
     U: Iterator<Item = Result<T, E>>,
-    E: std::convert::Into<Error> + std::fmt::Debug,
-    I: std::iter::FromIterator<T>,
-    T: std::fmt::Debug,
+    E: std::convert::Into<Error>,
 {
     #[allow(clippy::redundant_closure_call)]
-    fn bcollect(self) -> Result<I> {
+    fn bcollect<I>(self) -> Result<I>
+    where
+        I: std::iter::FromIterator<T>,
+    {
         let (good, bad): (I, Vec<Error>) = (|(g, b): (Vec<_>, Vec<_>)| {
             (
-                g.into_iter().map(Result::unwrap).collect(),
+                g.into_iter()
+                    .map(|res| match res {
+                        Ok(x) => x,
+                        Err(_) => panic!(),
+                    })
+                    .collect(),
                 b.into_iter()
-                    .map(Result::unwrap_err)
+                    .map(|res| match res {
+                        Ok(_) => panic!(),
+                        Err(e) => e,
+                    })
                     .map(Into::into)
                     .collect(),
             )
@@ -90,7 +100,7 @@ mod tests {
     fn into_vec_fully_qualified() -> Result<()> {
         let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
 
-        let y = BeauCollector::<Vec<()>, ()>::bcollect(x.into_iter());
+        let y = BeauCollector::<()>::bcollect::<Vec<()>>(x.into_iter());
 
         assert!(y.is_err());
 
@@ -101,7 +111,7 @@ mod tests {
     fn into_vec() -> Result<()> {
         let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
 
-        let y: Result<Vec<()>> = x.into_iter().bcollect();
+        let y: Result<_> = x.into_iter().bcollect::<Vec<()>>();
 
         assert!(y.is_err());
 
@@ -168,7 +178,9 @@ mod tests {
     fn into_hashmap_ok() -> Result<()> {
         let x: Vec<Result<_>> = vec![Ok((1, 10)), Ok((2, 20)), Ok((3, 30))];
 
-        let y: Result<std::collections::HashMap<usize, usize>> = x.into_iter().bcollect();
+        let y = x
+            .into_iter()
+            .bcollect::<std::collections::HashMap<usize, usize>>();
 
         assert!(y.is_ok());
 
