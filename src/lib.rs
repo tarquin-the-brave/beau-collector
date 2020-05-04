@@ -90,7 +90,7 @@ mod tests {
     fn into_vec_fully_qualified() -> Result<()> {
         let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
 
-        let y: Result<Vec<()>> = BeauCollector::<Vec<()>, ()>::bcollect(x.into_iter());
+        let y = BeauCollector::<Vec<()>, ()>::bcollect(x.into_iter());
 
         assert!(y.is_err());
 
