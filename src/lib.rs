@@ -87,6 +87,17 @@ mod tests {
     use super::*;
 
     #[test]
+    fn into_vec_fully_qualified() -> Result<()> {
+        let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
+
+        let y: Result<Vec<()>> = BeauCollector::<Vec<()>, ()>::bcollect(x.into_iter());
+
+        assert!(y.is_err());
+
+        Ok(())
+    }
+
+    #[test]
     fn into_vec() -> Result<()> {
         let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
 
