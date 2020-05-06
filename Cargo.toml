@@ -3,7 +3,6 @@ name = "beau_collector"
 version = "0.2.0"
 authors = ["tarquin-the-brave <tomsteavenson@gmail.com>"]
 edition = "2018"
-license = "MIT"
 license-file = "LICENSE"
 description = "Collect up all errors into a single error"
 homepage = "https://docs.rs/beau_collector"
