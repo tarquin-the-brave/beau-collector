@@ -4,17 +4,22 @@
 //!  The resultant Error has an error message with all the
 //!  errors' messages each on a newline.
 //!
+//!  The chain of causes for each error is retained with anyhow's
+//!  [inline representation][i], where causes are separated by colons.
+//!
+//!  [i]: https://docs.rs/anyhow/1.0.28/anyhow/struct.Error.html#display-representations
+//!
 //!  Examples:
 //!
 //!  ```
-//!  use anyhow::{anyhow, Result};
+//!  use anyhow::{anyhow, Result, Context};
 //!  use beau_collector::BeauCollector as _;
 //!
-//!  let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woops again"))];
+//!  let x = vec![Ok(()), Err(anyhow!("woops")).context("There was an error"), Err(anyhow!("woops again"))];
 //!
 //!  let y: Result<Vec<()>> = x.into_iter().bcollect();
 //!
-//!  assert_eq!(y.unwrap_err().to_string(), "woops\nwoops again")
+//!  assert_eq!(y.unwrap_err().to_string(), "There was an error: woops\nwoops again")
 //!  ```
 //!
 //!  ,
@@ -86,7 +91,7 @@ where
             use itertools::Itertools as _;
             Err(anyhow!(
                 "{}",
-                bad.iter().map(|e| e.to_string()).format("\n")
+                bad.iter().map(|e| format!("{:#}", e)).format("\n")
             ))
         }
     }
@@ -109,11 +114,23 @@ mod tests {
 
     #[test]
     fn into_vec() -> Result<()> {
-        let x = vec![Ok(()), Err(anyhow!("woops")), Err(anyhow!("woopsie"))];
+        use anyhow::Context;
+
+        let x = vec![
+            Ok(()),
+            Err(anyhow!("woops"))
+                .context("There was a problem")
+                .context("I regret to inform you"),
+            Err(anyhow!("woopsie")),
+        ];
 
         let y: Result<_> = x.into_iter().bcollect::<Vec<()>>();
 
         assert!(y.is_err());
+        assert_eq!(
+            y.unwrap_err().to_string(),
+            "I regret to inform you: There was a problem: woops\nwoopsie"
+        );
 
         Ok(())
     }

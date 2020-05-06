@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Don't throw away error cause chain when formatting the errors into one error.
+  Use anyhow's [inline representation][inlinerepr] instead.  Error message where some collected
+  errors had a chain of causes will now look like:
+
+```
+first error without causes
+there was an error processing x: something went wrong: second error
+```
+
+Where causes are separated by colons.
+
+[inlinerepr]: https://docs.rs/anyhow/1.0.28/anyhow/struct.Error.html#display-representations
+
 ## [0.2.0] - 2020-05-04
 ### Changed
 - Remove requirement for `T: std::fmt::Debug`, where `T` is the type parameter
