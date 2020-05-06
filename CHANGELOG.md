@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2020-05-06
+
 ### Fixed
 - Don't throw away error cause chain when formatting the errors into one error.
   Use anyhow's [inline representation][inlinerepr] instead.  Error message where some collected
@@ -70,9 +72,10 @@ let y = beau_collector::BeauCollector::bcollect::<Vec<String>>(x.iter().map(f));
 ### Added
 - Initial release - [Documentation](https://docs.rs/beau_collector/0.1.0/beau_collector/).
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/0.2.0...HEAD
-[0.2.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.1...v0.2.0
-[0.1.1]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/olivierlacan/keep-a-changelog/releases/tag/0.1.0
+[Unreleased]: https://github.com/tarquin-the-brave/beau-collector/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/tarquin-the-brave/beau-collector/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/tarquin-the-brave/beau-collector/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/tarquin-the-brave/beau-collector/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/tarquin-the-brave/beau-collector/releases/tag/0.1.0
 
 

@@ -1,6 +1,6 @@
 [package]
 name = "beau_collector"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["tarquin-the-brave <tomsteavenson@gmail.com>"]
 edition = "2018"
 license-file = "LICENSE"
